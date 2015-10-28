@@ -2,12 +2,12 @@
 out of the box android video player base on [ijkplayer](https://github.com/Bilibili/ijkplayer)
 
 # features
-1.base on ijkplayer
-2.gestures for volume control
-3.gestures for brightness control
-4.gestures for forward or backward
-5.fullscreen by manual or sensor
-6.try to replay when error(only for live video)
+1. base on ijkplayer
+2. gestures for volume control
+3. gestures for brightness control
+4. gestures for forward or backward
+5. fullscreen by manual or sensor
+6. try to replay when error(only for live video)
 
 # How to use ([example code](https://github.com/tcking/GiraffePlayer/blob/master/app/src/main/java/tcking/github/com/giraffeplayer/example/MainActivity.java))
 ## case 1: only what to play a vedio fullscreen
