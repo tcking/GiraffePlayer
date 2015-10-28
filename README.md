@@ -9,12 +9,12 @@ out of the box android video player base on [ijkplayer](https://github.com/Bilib
 5.fullscreen by manual or sensor
 6.try to replay when error(only for live video)
 
-# How to use (![example code](https://github.com/tcking/GiraffePlayer/blob/master/app/src/main/java/tcking/github/com/giraffeplayer/example/MainActivity.java))
-# case 1:only what to play a vedio fullscreen
+# How to use ([example code](https://github.com/tcking/GiraffePlayer/blob/master/app/src/main/java/tcking/github/com/giraffeplayer/example/MainActivity.java))
+## case 1: only what to play a vedio fullscreen
 just call`GiraffePlayerActivity.play(activity,url,title)`,all is done.
 
-# case 2:embed a player in a layout
-## step 1 include video layout in your layout xml file
+## case 2: embed a player in a layout
+### step 1: include video layout in your layout xml file
 ``` xml
 
 <include
@@ -25,13 +25,14 @@ just call`GiraffePlayerActivity.play(activity,url,title)`,all is done.
 ```
 notice:the giraffe player is match_parent default,if you want to specify `height` or `width` you can overwrite `layout_width` and `layout_width` in `include` tag
 
-## step 2 new player and call `play`
+### step 2.2: new player and call `play`
 ``` java
 
 GiraffeVideoPlayer player = new GiraffeVideoPlayer(activity);
 player.play(url);
 
 ```
+# screencap
 
 ![](https://github.com/tcking/GiraffePlayer/blob/master/screencap/device-2015-10-28-142934.png)
 ![](https://github.com/tcking/GiraffePlayer/blob/master/screencap/device-2015-10-28-143207.png)
