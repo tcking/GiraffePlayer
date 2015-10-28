@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <include
+        layout="@layout/giraffe_player"
+        android:layout_width="match_parent"
+        android:layout_height="210dp"/>
+
+    <LinearLayout
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_url"
+            android:layout_margin="8dp"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:selectAllOnFocus="true"
+            android:layout_height="wrap_content"
+            android:gravity="top|left"
+            android:text="http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8"/>
+
+        <Button
+            android:id="@+id/btn_play"
+            android:layout_margin="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="play"
+            />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_play_sample_1"
+        android:text="play sample 1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btn_play_sample_2"
+        android:text="play sample 2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btn_open"
+        android:text="play by out of the box player"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
