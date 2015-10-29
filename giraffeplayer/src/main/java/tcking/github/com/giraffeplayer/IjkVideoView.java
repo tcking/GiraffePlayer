@@ -860,11 +860,11 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
             IRenderView.AR_ASPECT_FIT_PARENT,
             IRenderView.AR_ASPECT_FILL_PARENT,
             IRenderView.AR_ASPECT_WRAP_CONTENT,
-            // IRenderView.AR_MATCH_PARENT,
+             IRenderView.AR_MATCH_PARENT,
             IRenderView.AR_16_9_FIT_PARENT,
             IRenderView.AR_4_3_FIT_PARENT};
     private int mCurrentAspectRatioIndex = 0;
-    private int mCurrentAspectRatio = s_allAspectRatio[1];
+    private int mCurrentAspectRatio = s_allAspectRatio[mCurrentAspectRatioIndex];
 
     public int toggleAspectRatio() {
         mCurrentAspectRatioIndex++;
@@ -925,4 +925,15 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
         }
     }
 
+    public void setAspectRatio(int aspectRatio) {
+        for (int i = 0; i < s_allAspectRatio.length; i++) {
+            if (s_allAspectRatio[i]==aspectRatio) {
+                mCurrentAspectRatioIndex=i;
+                if (mRenderView != null){
+                    mRenderView.setAspectRatio(mCurrentAspectRatio);
+                }
+                break;
+            }
+        }
+    }
 }

@@ -2,6 +2,7 @@
 <RelativeLayout
     android:id="@+id/app_video_box"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#000"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 

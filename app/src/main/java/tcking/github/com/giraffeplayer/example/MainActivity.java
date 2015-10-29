@@ -36,7 +36,14 @@ public class MainActivity extends AppCompatActivity {
                     player.setTitle(url);
                 }else if (v.getId() == R.id.btn_open) {
                     String url = ((EditText) findViewById(R.id.et_url)).getText().toString();
-                    GiraffePlayerActivity.play(MainActivity.this,url,url);
+                    GiraffePlayerActivity.configPlayer(MainActivity.this).setTitle(url).play(url);
+//                    more configuration example:
+//                    GiraffePlayerActivity.configPlayer(MainActivity.this)
+//                            .setScaleType(GiraffeVideoPlayer.SCALETYPE_FITPARENT)
+//                            .setDefaultRetryTime(5 * 1000)
+//                            .setFullScreenOnly(false)
+//                            .setTitle(url)
+//                            .play(url);
                 }
             }
         };
