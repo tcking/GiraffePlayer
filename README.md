@@ -45,4 +45,4 @@ player.play(url);
 ![](https://github.com/tcking/GiraffePlayer/blob/master/screencap/device-2015-10-28-143207.png)
 ![](https://github.com/tcking/GiraffePlayer/blob/master/screencap/device-2015-10-28-143304.png)
 ![](https://github.com/tcking/GiraffePlayer/blob/master/screencap/device-2015-10-28-143343.png)
-![](https://github.com/tcking/GiraffePlayer/blob/master/screencap/ddevice-2015-10-28-143722.png)
+![](https://github.com/tcking/GiraffePlayer/blob/master/screencap/device-2015-10-28-143722.png)
