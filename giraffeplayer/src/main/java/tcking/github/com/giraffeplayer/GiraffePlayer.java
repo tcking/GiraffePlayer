@@ -31,7 +31,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 /**
  * Created by tcking on 15/10/27.
  */
-public class GiraffeVideoPlayer {
+public class GiraffePlayer {
     /**
      * 可能会剪裁,保持原视频的大小，显示在中心,当原视频的大小超过view的大小超过部分裁剪处理
      */
@@ -260,7 +260,7 @@ public class GiraffeVideoPlayer {
         }
     };
 
-    public GiraffeVideoPlayer(final Activity activity) {
+    public GiraffePlayer(final Activity activity) {
         IjkMediaPlayer.loadLibrariesOnce(null);
         IjkMediaPlayer.native_profileBegin("libijkplayer.so");
         this.activity=activity;
@@ -743,6 +743,14 @@ public class GiraffeVideoPlayer {
         }else if (SCALETYPE_4_3.equals(scaleType)) {
             videoView.setAspectRatio(IRenderView.AR_4_3_FIT_PARENT);
         }
+    }
+
+    /**
+     * 是否显示左上导航图标(一般有actionbar or appToolbar时需要隐藏)
+     * @param show
+     */
+    public void setShowNavIcon(boolean show) {
+        $.id(R.id.app_video_finish).visibility(show ? View.VISIBLE : View.GONE);
     }
 
 

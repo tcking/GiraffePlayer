@@ -6,17 +6,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import tcking.github.com.giraffeplayer.GiraffePlayer;
 import tcking.github.com.giraffeplayer.GiraffePlayerActivity;
-import tcking.github.com.giraffeplayer.GiraffeVideoPlayer;
 
 public class MainActivity extends AppCompatActivity {
-    GiraffeVideoPlayer player;
+    GiraffePlayer player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        player = new GiraffeVideoPlayer(this);
+        player = new GiraffePlayer(this);
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -34,12 +34,13 @@ public class MainActivity extends AppCompatActivity {
                     ((EditText) findViewById(R.id.et_url)).setText(url);
                     player.play(url);
                     player.setTitle(url);
+                    player.setShowNavIcon(false);
                 }else if (v.getId() == R.id.btn_open) {
                     String url = ((EditText) findViewById(R.id.et_url)).getText().toString();
                     GiraffePlayerActivity.configPlayer(MainActivity.this).setTitle(url).play(url);
 //                    more configuration example:
 //                    GiraffePlayerActivity.configPlayer(MainActivity.this)
-//                            .setScaleType(GiraffeVideoPlayer.SCALETYPE_FITPARENT)
+//                            .setScaleType(GiraffePlayer.SCALETYPE_FITPARENT)
 //                            .setDefaultRetryTime(5 * 1000)
 //                            .setFullScreenOnly(false)
 //                            .setTitle(url)

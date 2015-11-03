@@ -1,7 +1,6 @@
 package tcking.github.com.giraffeplayer;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -11,14 +10,12 @@ import android.text.TextUtils;
 import android.view.Window;
 import android.widget.Toast;
 
-import java.io.Serializable;
-
 /**
  * Created by tcking on 15/10/27.
  */
 public class GiraffePlayerActivity extends Activity {
 
-    GiraffeVideoPlayer player;
+    GiraffePlayer player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +26,13 @@ public class GiraffePlayerActivity extends Activity {
         if (config == null || TextUtils.isEmpty(config.url)) {
             Toast.makeText(this, "请指定播放视频的地址", Toast.LENGTH_SHORT).show();
         } else {
-            player = new GiraffeVideoPlayer(this);
+            player = new GiraffePlayer(this);
             player.setTitle(config.title);
             player.setDefaultRetryTime(config.defaultRetryTime);
             player.setFullScreenOnly(config.fullScreenOnly);
-            player.setScaleType(TextUtils.isEmpty(config.scaleType) ? GiraffeVideoPlayer.SCALETYPE_FITPARENT : config.scaleType);
+            player.setScaleType(TextUtils.isEmpty(config.scaleType) ? GiraffePlayer.SCALETYPE_FITPARENT : config.scaleType);
             player.setTitle(TextUtils.isEmpty(config.title) ? "" : config.title);
+            player.setShowNavIcon(config.showNavIcon);
             player.play(config.url);
         }
     }
@@ -98,6 +96,8 @@ public class GiraffePlayerActivity extends Activity {
         private long defaultRetryTime = 5 * 1000;
         private String title;
         private String url;
+        private boolean showNavIcon=true;
+
 
 
 
@@ -139,6 +139,7 @@ public class GiraffePlayerActivity extends Activity {
             defaultRetryTime = in.readLong();
             title = in.readString();
             url = in.readString();
+            showNavIcon = in.readByte() != 0;
         }
 
         @Override
@@ -153,6 +154,7 @@ public class GiraffePlayerActivity extends Activity {
             dest.writeLong(defaultRetryTime);
             dest.writeString(title);
             dest.writeString(url);
+            dest.writeByte((byte) (showNavIcon ? 1 : 0));
         }
 
         public static final Parcelable.Creator<Config> CREATOR = new Parcelable.Creator<Config>() {
