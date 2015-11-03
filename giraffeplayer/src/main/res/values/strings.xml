@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">giraffeplayer</string>
+    <string name="app_name">GiraffePlayer</string>
     <string name="giraffe_player_url_empty">请指定播放视频的地址</string>
 </resources>
