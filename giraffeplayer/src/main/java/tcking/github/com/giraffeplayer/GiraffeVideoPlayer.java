@@ -75,6 +75,7 @@ public class GiraffeVideoPlayer {
     private int STATUS_PLAYING=2;
     private int STATUS_PAUSE=3;
     private int STATUS_COMPLETED=4;
+    private long pauseTime;
     private int status=STATUS_IDLE;
     private boolean isLive = true;//是否为直播
     private OrientationEventListener orientationEventListener;
@@ -416,6 +417,7 @@ public class GiraffeVideoPlayer {
     }
 
     public void onPause() {
+        pauseTime=System.currentTimeMillis();
         show(0);//把系统状态栏显示出来
         if (status==STATUS_PLAYING) {
             videoView.pause();
@@ -426,11 +428,16 @@ public class GiraffeVideoPlayer {
     }
 
     public void onResume() {
+        pauseTime=0;
         if (status==STATUS_PLAYING) {
-            videoView.start();
-            if (!isLive && currentPosition > 0) {
-                videoView.seekTo(currentPosition);
+            if (isLive) {
+                videoView.seekTo(0);
+            } else {
+                if (currentPosition>0) {
+                    videoView.seekTo(currentPosition);
+                }
             }
+            videoView.start();
         }
     }
 
@@ -633,7 +640,6 @@ public class GiraffeVideoPlayer {
             $.id(R.id.app_video_fastForward_target).text(generateTime(newPosition)+"/");
             $.id(R.id.app_video_fastForward_all).text(generateTime(duration));
         }
-//        Log.d("VideoController.onProgressSlide delta:{},text:{}", showDelta,text);
     }
 
     /**

@@ -2,7 +2,7 @@
 out of the box android video player base on [ijkplayer](https://github.com/Bilibili/ijkplayer)
 
 # features
-1. base on ijkplayer,support HLS,MP4 etc.
+1. base on ijkplayer,support RTMP , HLS , MP4,M4A etc.
 2. gestures for volume control
 3. gestures for brightness control
 4. gestures for forward or backward
