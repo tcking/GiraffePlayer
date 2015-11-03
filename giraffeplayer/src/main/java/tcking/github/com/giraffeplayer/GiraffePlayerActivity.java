@@ -24,7 +24,7 @@ public class GiraffePlayerActivity extends Activity {
         setContentView(R.layout.giraffe_player);
         Config config = getIntent().getParcelableExtra("config");
         if (config == null || TextUtils.isEmpty(config.url)) {
-            Toast.makeText(this, "请指定播放视频的地址", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.giraffe_player_url_empty, Toast.LENGTH_SHORT).show();
         } else {
             player = new GiraffePlayer(this);
             player.setTitle(config.title);
