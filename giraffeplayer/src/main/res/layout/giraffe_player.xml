@@ -157,7 +157,7 @@
                 android:id="@+id/app_video_status_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="播放遇到了点小问题"
+                android:text="@string/small_problem"
                 android:textColor="@android:color/white"
                 android:textSize="14dp"/>
         </LinearLayout>
