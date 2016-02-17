@@ -67,6 +67,7 @@ public class GiraffePlayer {
     private final SeekBar seekBar;
     private final AudioManager audioManager;
     private final int mMaxVolume;
+    private boolean playerSupport;
     private String url;
     private Query $;
     private int STATUS_ERROR=-1;
@@ -83,16 +84,13 @@ public class GiraffePlayer {
     private int defaultTimeout=3000;
     private int screenWidthPixels;
 
+
+
     private final View.OnClickListener onClickListener=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.app_video_fullscreen) {
-                if (getScreenOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                } else {
-                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                }
-                updateFullScreenButton();
+                toggleFullScreen();
             } else if (v.getId() == R.id.app_video_play) {
                 doPauseResume();
                 show(defaultTimeout);
@@ -261,8 +259,13 @@ public class GiraffePlayer {
     };
 
     public GiraffePlayer(final Activity activity) {
-        IjkMediaPlayer.loadLibrariesOnce(null);
-        IjkMediaPlayer.native_profileBegin("libijkplayer.so");
+        try {
+            IjkMediaPlayer.loadLibrariesOnce(null);
+            IjkMediaPlayer.native_profileBegin("libijkplayer.so");
+            playerSupport=true;
+        } catch (Throwable e) {
+            Log.e("GiraffePlayer", "loadLibraries error", e);
+        }
         this.activity=activity;
         screenWidthPixels = activity.getResources().getDisplayMetrics().widthPixels;
         $=new Query(activity);
@@ -366,6 +369,9 @@ public class GiraffePlayer {
         portrait=getScreenOrientation()==ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         initHeight=activity.findViewById(R.id.app_video_box).getLayoutParams().height;
         hideAll();
+        if (!playerSupport) {
+            showStatus(activity.getResources().getString(R.string.not_support));
+        }
     }
 
     /**
@@ -391,12 +397,12 @@ public class GiraffePlayer {
         }else if (newStatus == STATUS_ERROR) {
             hideAll();
             if (isLive) {
-                showStatus("播放出了点小问题,正在重试...");
+                showStatus(activity.getResources().getString(R.string.small_problem));
                 if (defaultRetryTime>0) {
                     handler.sendEmptyMessageDelayed(MESSAGE_RESTART_PLAY, defaultRetryTime);
                 }
             } else {
-                showStatus("不能播放此视频");
+                showStatus(activity.getResources().getString(R.string.small_problem));
             }
         } else if(newStatus==STATUS_LOADING){
             hideAll();
@@ -510,9 +516,11 @@ public class GiraffePlayer {
 
     public void play(String url) {
         this.url = url;
-        $.id(R.id.app_video_loading).visible();
-        videoView.setVideoPath(url);
-        videoView.start();
+        if (playerSupport) {
+            $.id(R.id.app_video_loading).visible();
+            videoView.setVideoPath(url);
+            videoView.start();
+        }
     }
 
     private String generateTime(long time) {
@@ -608,7 +616,7 @@ public class GiraffePlayer {
         int i = (int) (index * 1.0 / mMaxVolume * 100);
         String s = i + "%";
         if (i == 0) {
-            s = "关闭";
+            s = "off";
         }
         // 显示
         $.id(R.id.app_video_volume_icon).image(i==0?R.drawable.ic_volume_off_white_36dp:R.drawable.ic_volume_up_white_36dp);
@@ -715,6 +723,8 @@ public class GiraffePlayer {
         tryFullScreen(fullScreenOnly);
         if (fullScreenOnly) {
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         }
     }
 
@@ -751,6 +761,22 @@ public class GiraffePlayer {
      */
     public void setShowNavIcon(boolean show) {
         $.id(R.id.app_video_finish).visibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    public void start() {
+        videoView.start();
+    }
+
+    public void pause() {
+        videoView.pause();
+    }
+
+    public boolean onBackPressed() {
+        if (!fullScreenOnly && getScreenOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            return true;
+        }
+        return false;
     }
 
 
@@ -919,5 +945,37 @@ public class GiraffePlayer {
             }
             return true;
         }
+    }
+
+    /**
+     * is player support this device
+     * @return
+     */
+    public boolean isPlayerSupport() {
+        return playerSupport;
+    }
+
+    public void stopPlayback(){
+        videoView.stopPlayback();
+    }
+
+    public void seekTo(int msec){
+        videoView.seekTo(msec);
+    }
+
+    public void playInFullScreen(boolean fullScreen){
+        if (fullScreen) {
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            updateFullScreenButton();
+        }
+    }
+
+    public void toggleFullScreen(){
+        if (getScreenOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+        updateFullScreenButton();
     }
 }

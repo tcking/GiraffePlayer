@@ -2,4 +2,6 @@
     <string name="app_name">GiraffePlayer</string>
     <string name="giraffe_player_url_empty">Please specify the address of the video playback</string>
     <string name="small_problem">Player encountered a small problem</string>
+    <string name="can_not_play">can not play this video</string>
+    <string name="not_support">player not support this device</string>
 </resources>

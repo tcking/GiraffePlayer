@@ -51,12 +51,22 @@ public class MainActivity extends AppCompatActivity {
 //                            .setFullScreenOnly(false)
 //                            .setTitle(url)
 //                            .play(url);
+                }else if (v.getId() == R.id.btn_start) {
+                    player.start();
+                }else if (v.getId() == R.id.btn_pause) {
+                    player.pause();
+                }else if (v.getId() == R.id.btn_toggle) {
+                    player.toggleFullScreen();
                 }
             }
         };
         findViewById(R.id.btn_play).setOnClickListener(clickListener);
         findViewById(R.id.btn_play_sample_1).setOnClickListener(clickListener);
         findViewById(R.id.btn_play_sample_2).setOnClickListener(clickListener);
+        findViewById(R.id.btn_play_sample_3).setOnClickListener(clickListener);
+        findViewById(R.id.btn_pause).setOnClickListener(clickListener);
+        findViewById(R.id.btn_start).setOnClickListener(clickListener);
+        findViewById(R.id.btn_toggle).setOnClickListener(clickListener);
         findViewById(R.id.btn_open).setOnClickListener(clickListener);
     }
 
@@ -90,5 +100,13 @@ public class MainActivity extends AppCompatActivity {
         if (player != null) {
             player.onConfigurationChanged(newConfig);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (player != null && player.onBackPressed()) {
+            return;
+        }
+        super.onBackPressed();
     }
 }

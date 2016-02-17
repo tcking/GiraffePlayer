@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">GiraffePlayer</string>
     <string name="giraffe_player_url_empty">请指定播放视频的地址</string>
-    <string name="small_problem">请指定播放视频的地址</string>
+    <string name="small_problem">发送了点小问题,稍后重试</string>
+    <string name="can_not_play">不能播放此视频</string>
+    <string name="not_support">播放器不支持此设备</string>
 </resources>

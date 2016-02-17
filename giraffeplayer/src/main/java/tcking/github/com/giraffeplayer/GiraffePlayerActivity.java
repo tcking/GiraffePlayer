@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.Window;
 import android.widget.Toast;
 
@@ -96,9 +97,7 @@ public class GiraffePlayerActivity extends Activity {
         private long defaultRetryTime = 5 * 1000;
         private String title;
         private String url;
-        private boolean showNavIcon=true;
-
-
+        private boolean showNavIcon = true;
 
 
         public Config setTitle(String title) {
@@ -166,5 +165,13 @@ public class GiraffePlayerActivity extends Activity {
                 return new Config[size];
             }
         };
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (player != null && player.onBackPressed()) {
+            return;
+        }
+        super.onBackPressed();
     }
 }
