@@ -30,6 +30,12 @@ public class MainActivity extends AppCompatActivity {
                     player.play(url);
                     player.setTitle(url);
                 } else if (v.getId() == R.id.btn_play_sample_2) {
+                    String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+                    ((EditText) findViewById(R.id.et_url)).setText(url);
+                    player.play(url);
+                    player.setTitle(url);
+                    player.setShowNavIcon(false);
+                }else if (v.getId() == R.id.btn_play_sample_3) {
                     String url = "https://r3---sn-o097znes.googlevideo.com/videoplayback?nh=IgpwcjAxLnNqYzA3KgkxMjcuMC4wLjE&key=yt6&ratebypass=yes&source=youtube&dur=15892.363&lmt=1448977432536368&mime=video/mp4&pl=32&expire=1455621993&mm=31&mn=sn-o097znes&ip=2600:3c01::f03c:91ff:fe70:35ff&upn=tUX3VKaaIE8&sparams=dur,id,initcwndbps,ip,ipbits,itag,lmt,mime,mm,mn,ms,mv,nh,pl,ratebypass,requiressl,source,upn,expire&mt=1455600346&mv=m&initcwndbps=16662500&ms=au&itag=18&ipbits=0&requiressl=yes&signature=B90159512BE71340D1112585C6B5744BBBA21784.03AA682D30B23C444773CBDB46A4B5F3F30C61D8&fexp=9407169,9408207,9416126,9420452,9422596,9423660,9423662,9424771,9425737,9426687,9428034,9428064,9428246,9428649,9428941&id=o-AAqIBBudm5xSSzsgeY2Han3wIQ4j2TUH3dlhQxA3XN5A&sver=3";
                     ((EditText) findViewById(R.id.et_url)).setText(url);
                     player.play(url);
