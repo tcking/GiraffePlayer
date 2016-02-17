@@ -8,7 +8,7 @@ out of the box android video player base on [ijkplayer](https://github.com/Bilib
 4. gestures for forward or backward
 5. fullscreen by manual or sensor
 6. try to replay when error(only for live video)
-7. set video scale type
+7. set video scale type (double click video will switch the scale types in app,you can find the difference)
     1. fitParent:可能会剪裁,保持原视频的大小，显示在中心,当原视频的大小超过view的大小超过部分裁剪处理
     2. fillParent:可能会剪裁,等比例放大视频，直到填满View为止,超过View的部分作裁剪处理
     3. wrapContent:将视频的内容完整居中显示，如果视频大于view,则按比例缩视频直到完全显示在view中
