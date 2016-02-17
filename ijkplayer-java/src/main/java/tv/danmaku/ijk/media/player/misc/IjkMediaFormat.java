@@ -44,7 +44,7 @@ public class IjkMediaFormat implements IMediaFormat {
     // Codec
     public static final String CODEC_NAME_H264 = "h264";
 
-    public IjkMediaMeta.IjkStreamMeta mMediaFormat;
+    public final IjkMediaMeta.IjkStreamMeta mMediaFormat;
 
     public IjkMediaFormat(IjkMediaMeta.IjkStreamMeta streamMeta) {
         mMediaFormat = streamMeta;
@@ -86,12 +86,13 @@ public class IjkMediaFormat implements IMediaFormat {
 
         protected abstract String doFormat(IjkMediaFormat mediaFormat);
 
+        @SuppressWarnings("SameReturnValue")
         protected String getDefaultString() {
             return "N/A";
         }
     }
 
-    private static Map<String, Formatter> sFormatterMap = new HashMap<String, Formatter>();
+    private static final Map<String, Formatter> sFormatterMap = new HashMap<String, Formatter>();
 
     {
         sFormatterMap.put(KEY_IJK_CODEC_LONG_NAME_UI, new Formatter() {
@@ -124,8 +125,7 @@ public class IjkMediaFormat implements IMediaFormat {
                 sb.append(profile);
 
                 String codecName = mediaFormat.getString(IjkMediaMeta.IJKM_KEY_CODEC_NAME);
-                if (TextUtils.isEmpty(codecName)) {
-                } else if (codecName.equalsIgnoreCase(CODEC_NAME_H264)) {
+                if (!TextUtils.isEmpty(codecName) && codecName.equalsIgnoreCase(CODEC_NAME_H264)) {
                     int level = mediaFormat.getInteger(IjkMediaMeta.IJKM_KEY_CODEC_LEVEL);
                     if (level < 10)
                         return sb.toString();

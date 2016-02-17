@@ -46,15 +46,30 @@ public class IjkTrackInfo implements ITrackInfo {
 
     @Override
     public String toString() {
+        return getClass().getSimpleName() + '{' + getInfoInline() + "}";
+    }
+
+    @Override
+    public String getInfoInline() {
         StringBuilder out = new StringBuilder(128);
-        out.append(getClass().getName());
-        out.append('{');
         switch (mTrackType) {
             case MEDIA_TRACK_TYPE_VIDEO:
                 out.append("VIDEO");
+                out.append(", ");
+                out.append(mStreamMeta.getCodecShortNameInline());
+                out.append(", ");
+                out.append(mStreamMeta.getBitrateInline());
+                out.append(", ");
+                out.append(mStreamMeta.getResolutionInline());
                 break;
             case MEDIA_TRACK_TYPE_AUDIO:
                 out.append("AUDIO");
+                out.append(", ");
+                out.append(mStreamMeta.getCodecShortNameInline());
+                out.append(", ");
+                out.append(mStreamMeta.getBitrateInline());
+                out.append(", ");
+                out.append(mStreamMeta.getSampleRateInline());
                 break;
             case MEDIA_TRACK_TYPE_TIMEDTEXT:
                 out.append("TIMEDTEXT");
@@ -66,8 +81,6 @@ public class IjkTrackInfo implements ITrackInfo {
                 out.append("UNKNOWN");
                 break;
         }
-        // out.append(", " + mFormat.toString());
-        out.append("}");
         return out.toString();
     }
 }

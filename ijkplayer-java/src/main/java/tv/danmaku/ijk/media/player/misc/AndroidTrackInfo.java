@@ -22,7 +22,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 
 public class AndroidTrackInfo implements ITrackInfo {
-    private MediaPlayer.TrackInfo mTrackInfo;
+    private final MediaPlayer.TrackInfo mTrackInfo;
 
     public static AndroidTrackInfo[] fromMediaPlayer(MediaPlayer mp) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
@@ -31,7 +31,7 @@ public class AndroidTrackInfo implements ITrackInfo {
         return null;
     }
 
-    public static AndroidTrackInfo[] fromTrackInfo(MediaPlayer.TrackInfo[] trackInfos) {
+    private static AndroidTrackInfo[] fromTrackInfo(MediaPlayer.TrackInfo[] trackInfos) {
         if (trackInfos == null)
             return null;
 
@@ -43,7 +43,7 @@ public class AndroidTrackInfo implements ITrackInfo {
         return androidTrackInfo;
     }
 
-    public AndroidTrackInfo(MediaPlayer.TrackInfo trackInfo) {
+    private AndroidTrackInfo(MediaPlayer.TrackInfo trackInfo) {
         mTrackInfo = trackInfo;
     }
 
@@ -76,7 +76,7 @@ public class AndroidTrackInfo implements ITrackInfo {
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder(128);
-        out.append(getClass().getName());
+        out.append(getClass().getSimpleName());
         out.append('{');
         if (mTrackInfo != null) {
             out.append(mTrackInfo.toString());
@@ -85,5 +85,15 @@ public class AndroidTrackInfo implements ITrackInfo {
         }
         out.append('}');
         return out.toString();
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @Override
+    public String getInfoInline() {
+        if (mTrackInfo != null) {
+            return mTrackInfo.toString();
+        } else {
+            return "null";
+        }
     }
 }

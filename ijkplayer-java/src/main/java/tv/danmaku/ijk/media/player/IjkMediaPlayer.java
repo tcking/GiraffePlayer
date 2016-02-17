@@ -45,12 +45,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 
 import tv.danmaku.ijk.media.player.annotations.AccessedByNative;
 import tv.danmaku.ijk.media.player.annotations.CalledByNative;
+import tv.danmaku.ijk.media.player.misc.IMediaDataSource;
 import tv.danmaku.ijk.media.player.misc.ITrackInfo;
 import tv.danmaku.ijk.media.player.misc.IjkTrackInfo;
 import tv.danmaku.ijk.media.player.pragma.DebugLog;
@@ -103,10 +105,15 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
     public static final int PROP_FLOAT_VIDEO_DECODE_FRAMES_PER_SECOND = 10001;
     public static final int PROP_FLOAT_VIDEO_OUTPUT_FRAMES_PER_SECOND = 10002;
     public static final int FFP_PROP_FLOAT_PLAYBACK_RATE              = 10003;
+
+    public static final int FFP_PROP_INT64_SELECTED_VIDEO_STREAM      = 20001;
+    public static final int FFP_PROP_INT64_SELECTED_AUDIO_STREAM      = 20002;
     //----------------------------------------
 
     @AccessedByNative
     private long mNativeMediaPlayer;
+    @AccessedByNative
+    private long mNativeMediaDataSource;
 
     @AccessedByNative
     private int mNativeSurfaceTexture;
@@ -131,7 +138,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
      * Default library loader
      * Load them by yourself, if your libraries are not installed at default place.
      */
-    private static IjkLibLoader sLocalLibLoader = new IjkLibLoader() {
+    private static final IjkLibLoader sLocalLibLoader = new IjkLibLoader() {
         @Override
         public void loadLibrary(String libName) throws UnsatisfiedLinkError, SecurityException {
             System.loadLibrary(libName);
@@ -326,8 +333,8 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
                 setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getDeclaredLength());
             }
             return;
-        } catch (SecurityException ex) {
-        } catch (IOException ex) {
+        } catch (SecurityException ignored) {
+        } catch (IOException ignored) {
         } finally {
             if (fd != null) {
                 fd.close();
@@ -382,6 +389,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
                 if (!TextUtils.isEmpty(value))
                     sb.append(entry.getValue());
                 sb.append("\r\n");
+                setOption(OPT_CATEGORY_FORMAT, "headers", sb.toString());
             }
         }
         setDataSource(path);
@@ -436,11 +444,19 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
         setDataSource(fd);
     }
 
+    public void setDataSource(IMediaDataSource mediaDataSource)
+            throws IllegalArgumentException, SecurityException, IllegalStateException {
+        _setDataSource(mediaDataSource);
+    }
+
     private native void _setDataSource(String path, String[] keys, String[] values)
             throws IOException, IllegalArgumentException, SecurityException, IllegalStateException;
 
     private native void _setDataSourceFd(int fd)
             throws IOException, IllegalArgumentException, SecurityException, IllegalStateException;
+
+    private native void _setDataSource(IMediaDataSource mediaDataSource)
+            throws IllegalArgumentException, SecurityException, IllegalStateException;
 
     @Override
     public String getDataSource() {
@@ -555,6 +571,32 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
         return trackInfos.toArray(new IjkTrackInfo[trackInfos.size()]);
     }
 
+    // TODO: @Override
+    public int getSelectedTrack(int trackType) {
+        switch (trackType) {
+            case ITrackInfo.MEDIA_TRACK_TYPE_VIDEO:
+                return (int)_getPropertyLong(FFP_PROP_INT64_SELECTED_VIDEO_STREAM, -1);
+            case ITrackInfo.MEDIA_TRACK_TYPE_AUDIO:
+                return (int)_getPropertyLong(FFP_PROP_INT64_SELECTED_AUDIO_STREAM, -1);
+            default:
+                return -1;
+        }
+    }
+
+    // experimental, should set DEFAULT_MIN_FRAMES and MAX_MIN_FRAMES to 25
+    // TODO: @Override
+    public void selectTrack(int track) {
+        _setStreamSelected(track, true);
+    }
+
+    // experimental, should set DEFAULT_MIN_FRAMES and MAX_MIN_FRAMES to 25
+    // TODO: @Override
+    public void deselectTrack(int track) {
+        _setStreamSelected(track, false);
+    }
+
+    private native void _setStreamSelected(int stream, boolean select);
+
     @Override
     public int getVideoWidth() {
         return mVideoWidth;
@@ -663,6 +705,8 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
 
     private native float _getPropertyFloat(int property, float defaultValue);
     private native void  _setPropertyFloat(int property, float value);
+    private native long  _getPropertyLong(int property, long defaultValue);
+    private native void  _setPropertyLong(int property, long value);
 
     @Override
     public native void setVolume(float leftVolume, float rightVolume);
@@ -762,12 +806,13 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
 
     private native void native_message_loop(Object IjkMediaPlayer_this);
 
-    protected void finalize() {
+    protected void finalize() throws Throwable {
+        super.finalize();
         native_finalize();
     }
 
     private static class EventHandler extends Handler {
-        private WeakReference<IjkMediaPlayer> mWeakPlayer;
+        private final WeakReference<IjkMediaPlayer> mWeakPlayer;
 
         public EventHandler(IjkMediaPlayer mp, Looper looper) {
             super(looper);
@@ -856,7 +901,6 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
 
             default:
                 DebugLog.e(TAG, "Unknown message type " + msg.what);
-                return;
             }
         }
     }
@@ -900,27 +944,8 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
         mOnControlMessageListener = listener;
     }
 
-    public static interface OnControlMessageListener {
-        public String onControlResolveSegmentUrl(int segment);
-    }
-
-    @CalledByNative
-    private static String onControlResolveSegmentUrl(Object weakThiz, int segment) {
-        DebugLog.ifmt(TAG, "onControlResolveSegmentUrl %d", segment);
-        if (weakThiz == null || !(weakThiz instanceof WeakReference<?>))
-            return null;
-
-        @SuppressWarnings("unchecked")
-        WeakReference<IjkMediaPlayer> weakPlayer = (WeakReference<IjkMediaPlayer>) weakThiz;
-        IjkMediaPlayer player = weakPlayer.get();
-        if (player == null)
-            return null;
-
-        OnControlMessageListener listener = player.mOnControlMessageListener;
-        if (listener == null)
-            return null;
-
-        return listener.onControlResolveSegmentUrl(segment);
+    public interface OnControlMessageListener {
+        String onControlResolveSegmentUrl(int segment);
     }
 
     /*
@@ -932,36 +957,68 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
         mOnNativeInvokeListener = listener;
     }
 
-    public static interface OnNativeInvokeListener {
-        /* return whether invoke is handled */
-        public boolean onNativeInvoke(int what, Bundle args);
+    public interface OnNativeInvokeListener {
+        int ON_CONCAT_RESOLVE_SEGMENT = 0x10000;
+        int ON_TCP_OPEN = 0x10001;
+        int ON_HTTP_OPEN = 0x10002;
+        // int ON_HTTP_RETRY = 0x10003;
+        int ON_LIVE_RETRY = 0x10004;
+
+        String ARG_URL = "url";
+        String ARG_SEGMENT_INDEX = "segment_index";
+        String ARG_RETRY_COUNTER = "retry_counter";
+
+        /*
+         * @return true if invoke is handled
+         * @throws Exception on any error
+         */
+        boolean onNativeInvoke(int what, Bundle args);
     }
 
     @CalledByNative
     private static boolean onNativeInvoke(Object weakThiz, int what, Bundle args) {
         DebugLog.ifmt(TAG, "onNativeInvoke %d", what);
         if (weakThiz == null || !(weakThiz instanceof WeakReference<?>))
-            return false;
+            throw new IllegalStateException("<null weakThiz>.onNativeInvoke()");
 
         @SuppressWarnings("unchecked")
         WeakReference<IjkMediaPlayer> weakPlayer = (WeakReference<IjkMediaPlayer>) weakThiz;
         IjkMediaPlayer player = weakPlayer.get();
         if (player == null)
-            return false;
+            throw new IllegalStateException("<null weakPlayer>.onNativeInvoke()");
 
         OnNativeInvokeListener listener = player.mOnNativeInvokeListener;
-        if (listener == null)
-            return false;
+        if (listener != null && listener.onNativeInvoke(what, args))
+            return true;
 
-        return listener.onNativeInvoke(what, args);
+        switch (what) {
+            case OnNativeInvokeListener.ON_CONCAT_RESOLVE_SEGMENT: {
+                OnControlMessageListener onControlMessageListener = player.mOnControlMessageListener;
+                if (onControlMessageListener == null)
+                    return false;
+
+                int segmentIndex = args.getInt(OnNativeInvokeListener.ARG_SEGMENT_INDEX, -1);
+                if (segmentIndex < 0)
+                    throw new InvalidParameterException("onNativeInvoke(invalid segment index)");
+
+                String newUrl = onControlMessageListener.onControlResolveSegmentUrl(segmentIndex);
+                if (newUrl == null)
+                    throw new RuntimeException(new IOException("onNativeInvoke() = <NULL newUrl>"));
+
+                args.putString(OnNativeInvokeListener.ARG_URL, newUrl);
+                return true;
+            }
+            default:
+                return false;
+        }
     }
 
     /*
      * MediaCodec select
      */
 
-    public static interface OnMediaCodecSelectListener {
-        public String onMediaCodecSelect(IMediaPlayer mp, String mimeType, int profile, int level);
+    public interface OnMediaCodecSelectListener {
+        String onMediaCodecSelect(IMediaPlayer mp, String mimeType, int profile, int level);
     }
     private OnMediaCodecSelectListener mOnMediaCodecSelectListener;
     public void setOnMediaCodecSelectListener(OnMediaCodecSelectListener listener) {
@@ -992,7 +1049,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
     }
 
     public static class DefaultMediaCodecSelector implements OnMediaCodecSelectListener {
-        public static DefaultMediaCodecSelector sInstance = new DefaultMediaCodecSelector();
+        public static final DefaultMediaCodecSelector sInstance = new DefaultMediaCodecSelector();
 
         @SuppressWarnings("deprecation")
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
