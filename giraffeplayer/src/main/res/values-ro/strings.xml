@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">GiraffePlayer</string>
+    <string name="giraffe_player_url_empty">Please specify the address of the video playback</string>
+    <string name="small_problem">Player encountered a small problem</string>
+</resources>
