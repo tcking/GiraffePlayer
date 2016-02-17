@@ -2,7 +2,7 @@
 out of the box android video player base on [ijkplayer](https://github.com/Bilibili/ijkplayer)
 
 # features
-1. base on ijkplayer,support RTMP , HLS , MP4,M4A etc.
+1. base on ijkplayer,support RTMP , HLS (http & https) , MP4,M4A etc.
 2. gestures for volume control
 3. gestures for brightness control
 4. gestures for forward or backward
@@ -17,11 +17,11 @@ out of the box android video player base on [ijkplayer](https://github.com/Bilib
     6. 4:3:不剪裁,非等比例拉伸画面到4:3,并完全显示在View中
 
 # how to import library
-## using gradle
+## method 1: using gradle
  1. add `maven { url "https://jitpack.io" }` to your root project build file allprojects->repositories
- 2. add `compile 'com.github.tcking.GiraffePlayer:giraffeplayer:0.2'` to your app build file
+ 2. add `compile 'com.github.tcking.GiraffePlayer:giraffeplayer:0.3'` to your app build file
 
-## clone project
+## method 2: clone project
  1. git clone https://github.com/tcking/GiraffePlayer.git
  2. android studio->file->New->Import module->select `giraffeplayer`
 
