@@ -19,11 +19,15 @@ out of the box android video player base on [ijkplayer](https://github.com/Bilib
 # how to import library
 ## method 1: using gradle
  1. add `maven { url "https://jitpack.io" }` to your root project build file allprojects->repositories
- 2. add `compile 'com.github.tcking.GiraffePlayer:giraffeplayer:0.3'` to your app build file
+ 2. add `compile 'com.github.tcking.GiraffePlayer:giraffeplayer:0.4'` to your app build file
 
 ## method 2: clone project
  1. git clone https://github.com/tcking/GiraffePlayer.git
  2. android studio->file->New->Import module->select `giraffeplayer`
+ 
+## notice:
+ the player default support 6 CPU architecture:ARMv5, ARMv7, ARMv8,x86 and 86_64,if your project need't support all of the architectures,you can remove the folder in `ijkplayer-java/src/main/jniLibs` to generate a light APK.
+ read this first:[How to use 32-bit native libaries on 64-bit Android device](http://stackoverflow.com/questions/30782848/how-to-use-32-bit-native-libaries-on-64-bit-android-device),[What you should know about .so files](http://ph0b.com/android-abis-and-so-files/),[关于Android的.so文件你所需要知道的](http://www.jianshu.com/p/cb05698a1968)
 
 # How to use ([example code](https://github.com/tcking/GiraffePlayer/blob/master/app/src/main/java/tcking/github/com/giraffeplayer/example/MainActivity.java))
 ## case 1: only what to play a vedio fullscreen
