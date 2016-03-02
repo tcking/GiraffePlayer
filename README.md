@@ -48,7 +48,7 @@ notice:the giraffe player is match_parent default,if you want to specify `height
 ### step 2: new player and call `play`
 ``` java
 
-GiraffeVideoPlayer player = new GiraffeVideoPlayer(activity);
+GiraffePlayer player = new GiraffePlayer(activity);
 player.play(url);
 
 ```
