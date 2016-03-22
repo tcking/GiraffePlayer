@@ -47,6 +47,21 @@ GiraffePlayer player = new GiraffePlayer(activity);
 player.play(url);
 
 ```
+
+# API:
+* `play(url)` //play video
+* `stop()` //stop play
+* `pause()`
+* `start()` 
+* `forward()` // forward or back,example: forward(0.1f) forward(-0.1f)
+* `getCurrentPosition()`
+* `toggleAspectRatio()`
+* `seekTo()` //seek to specify position
+* `getDuration()` //get video duration
+* `onInfo()` //callback when have some information
+* `onError()` 
+* `onComplete()`
+* `onControlPanelVisibilityChange()` //callback when control panel visibility change
 # screencap
 
 ![](https://github.com/tcking/GiraffePlayer/blob/master/screencap/device-2015-10-28-142934.png)

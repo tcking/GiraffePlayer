@@ -12,72 +12,106 @@
         android:layout_width="match_parent"
         android:layout_height="210dp"/>
 
-    <LinearLayout
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/et_url"
-            android:layout_margin="8dp"
-            android:layout_width="0px"
-            android:layout_weight="1"
-            android:selectAllOnFocus="true"
-            android:layout_height="wrap_content"
-            android:gravity="top|left"
-            android:text="http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8"/>
-
-        <Button
-            android:id="@+id/btn_play"
-            android:layout_margin="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="play"
-            />
-    </LinearLayout>
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/btn_pause"
-            android:text="pause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <Button
-            android:id="@+id/btn_start"
-            android:text="start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <Button
-            android:id="@+id/btn_toggle"
-            android:text="toggleFullScreen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_speed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-    </LinearLayout>
+                <EditText
+                    android:id="@+id/et_url"
+                    android:maxLines="4"
+                    android:layout_margin="8dp"
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:selectAllOnFocus="true"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|left"
+                    android:text="http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8"/>
 
-    <Button
-        android:id="@+id/btn_play_sample_1"
-        android:text="play sample 1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <Button
-        android:id="@+id/btn_play_sample_2"
-        android:text="play sample 2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <Button
-        android:id="@+id/btn_play_sample_3"
-        android:text="play sample 3(https)"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/btn_play"
+                    android:layout_margin="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="play"
+                    />
+            </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_open"
-        android:text="play by out of the box player"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/btn_pause"
+                    android:text="pause"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/btn_start"
+                    android:text="start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/btn_toggle"
+                    android:text="toggleFullScreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/btn_forward"
+                    android:text="forward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/btn_back"
+                    android:text="back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/btn_toggle_ratio"
+                    android:text="toggleRatio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_play_sample_1"
+                android:text="play sample 1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/btn_play_sample_2"
+                android:text="play sample 2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/btn_play_sample_3"
+                android:text="play sample 3(https)"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/btn_open"
+                android:text="play by out of the box player"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

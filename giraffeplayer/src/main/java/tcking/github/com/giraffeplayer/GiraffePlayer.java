@@ -78,7 +78,7 @@ public class GiraffePlayer {
     private int STATUS_COMPLETED=4;
     private long pauseTime;
     private int status=STATUS_IDLE;
-    private boolean isLive = true;//是否为直播
+    private boolean isLive = false;//是否为直播
     private OrientationEventListener orientationEventListener;
     final private int initHeight;
     private int defaultTimeout=3000;
@@ -113,6 +113,29 @@ public class GiraffePlayer {
     private int volume=-1;
     private long newPosition = -1;
     private long defaultRetryTime=5000;
+    private OnErrorListener onErrorListener=new OnErrorListener() {
+        @Override
+        public void onError(int what, int extra) {
+        }
+    };
+    private Runnable oncomplete =new Runnable() {
+        @Override
+        public void run() {
+
+        }
+    };
+    private OnInfoListener onInfoListener=new OnInfoListener(){
+        @Override
+        public void onInfo(int what, int extra) {
+
+        }
+    };
+    private OnControlPanelVisibilityChangeListener onControlPanelVisibilityChangeListener=new OnControlPanelVisibilityChangeListener() {
+        @Override
+        public void change(boolean isShowing) {
+
+        }
+    };
 
     /**
      * try to play when error(only for live video)
@@ -166,6 +189,7 @@ public class GiraffePlayer {
                 $.id(R.id.app_video_fullscreen).visible();
             }
             isShowing = true;
+            onControlPanelVisibilityChangeListener.change(true);
         }
         updatePausePlay();
         handler.sendEmptyMessage(MESSAGE_SHOW_PROGRESS);
@@ -274,19 +298,15 @@ public class GiraffePlayer {
             @Override
             public void onCompletion(IMediaPlayer mp) {
                 statusChange(STATUS_COMPLETED);
+                oncomplete.run();
             }
         });
         videoView.setOnErrorListener(new IMediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(IMediaPlayer mp, int what, int extra) {
                 statusChange(STATUS_ERROR);
+                onErrorListener.onError(what,extra);
                 return true;
-            }
-        });
-        videoView.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(IMediaPlayer mp) {
-                isLive = !videoView.canPause();
             }
         });
         videoView.setOnInfoListener(new IMediaPlayer.OnInfoListener() {
@@ -307,6 +327,7 @@ public class GiraffePlayer {
                         statusChange(STATUS_PLAYING);
                         break;
                 }
+                onInfoListener.onInfo(what,extra);
                 return false;
             }
         });
@@ -420,6 +441,7 @@ public class GiraffePlayer {
         $.id(R.id.app_video_fullscreen).invisible();
         $.id(R.id.app_video_status).gone();
         showBottomControl(false);
+        onControlPanelVisibilityChangeListener.change(false);
     }
 
     public void onPause() {
@@ -707,6 +729,7 @@ public class GiraffePlayer {
             $.id(R.id.app_video_top_box).gone();
             $.id(R.id.app_video_fullscreen).invisible();
             isShowing = false;
+            onControlPanelVisibilityChangeListener.change(false);
         }
     }
 
@@ -778,6 +801,8 @@ public class GiraffePlayer {
         }
         return false;
     }
+
+
 
 
     class Query {
@@ -955,19 +980,59 @@ public class GiraffePlayer {
         return playerSupport;
     }
 
-    public void stopPlayback(){
+    /**
+     * 是否正在播放
+     * @return
+     */
+    public boolean isPlaying() {
+        return videoView!=null?videoView.isPlaying():false;
+    }
+
+    public void stop(){
         videoView.stopPlayback();
     }
 
-    public void seekTo(int msec){
+    /**
+     * seekTo position
+     * @param msec  millisecond
+     */
+    public GiraffePlayer seekTo(int msec, boolean showControlPanle){
         videoView.seekTo(msec);
+        if (showControlPanle) {
+            show(defaultTimeout);
+        }
+        return this;
     }
 
-    public void playInFullScreen(boolean fullScreen){
+    public GiraffePlayer forward(float percent) {
+        if (isLive || percent>1 || percent<-1) {
+            return this;
+        }
+        onProgressSlide(percent);
+        showBottomControl(true);
+        handler.sendEmptyMessage(MESSAGE_SHOW_PROGRESS);
+        endGesture();
+        return this;
+    }
+
+    public int getCurrentPosition(){
+        return videoView.getCurrentPosition();
+    }
+
+    /**
+     * get video duration
+     * @return
+     */
+    public int getDuration(){
+        return videoView.getDuration();
+    }
+
+    public GiraffePlayer playInFullScreen(boolean fullScreen){
         if (fullScreen) {
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             updateFullScreenButton();
         }
+        return this;
     }
 
     public void toggleFullScreen(){
@@ -978,4 +1043,59 @@ public class GiraffePlayer {
         }
         updateFullScreenButton();
     }
+
+    public interface OnErrorListener{
+        void onError(int what, int extra);
+    }
+
+    public interface OnControlPanelVisibilityChangeListener{
+        void change(boolean isShowing);
+    }
+
+    public interface OnInfoListener{
+        void onInfo(int what, int extra);
+    }
+
+    public GiraffePlayer onError(OnErrorListener onErrorListener) {
+        this.onErrorListener = onErrorListener;
+        return this;
+    }
+
+    public GiraffePlayer onComplete(Runnable complete) {
+        this.oncomplete = complete;
+        return this;
+    }
+
+    public GiraffePlayer onInfo(OnInfoListener onInfoListener) {
+        this.onInfoListener = onInfoListener;
+        return this;
+    }
+
+    public GiraffePlayer onControlPanelVisibilityChang(OnControlPanelVisibilityChangeListener listener){
+        this.onControlPanelVisibilityChangeListener = listener;
+        return this;
+    }
+
+    /**
+     * set is live (can't seek forward)
+     * @param isLive
+     * @return
+     */
+    public GiraffePlayer live(boolean isLive) {
+        this.isLive = isLive;
+        return this;
+    }
+
+    public GiraffePlayer toggleAspectRatio(){
+        if (videoView != null) {
+            videoView.toggleAspectRatio();
+        }
+        return this;
+    }
+
+    public GiraffePlayer onControlPanelVisibilityChange(OnControlPanelVisibilityChangeListener listener){
+        this.onControlPanelVisibilityChangeListener = listener;
+        return this;
+    }
+
 }
