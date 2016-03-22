@@ -55,6 +55,7 @@ player.play(url);
 * `start()` 
 * `forward()` // forward or back,example: forward(0.1f) forward(-0.1f)
 * `getCurrentPosition()`
+* `setScaleType()`
 * `toggleAspectRatio()`
 * `seekTo()` //seek to specify position
 * `getDuration()` //get video duration
