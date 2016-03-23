@@ -483,7 +483,9 @@ public class GiraffePlayer {
                     if (portrait) {
                         $.id(R.id.app_video_box).height(initHeight, false);
                     } else {
-                        $.id(R.id.app_video_box).height(activity.getResources().getDisplayMetrics().heightPixels, false);
+                        int heightPixels = activity.getResources().getDisplayMetrics().heightPixels;
+                        int widthPixels = activity.getResources().getDisplayMetrics().widthPixels;
+                        $.id(R.id.app_video_box).height(Math.min(heightPixels,widthPixels), false);
                     }
                     updateFullScreenButton();
                 }
