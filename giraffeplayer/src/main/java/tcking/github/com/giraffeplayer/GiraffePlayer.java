@@ -268,10 +268,10 @@ public class GiraffePlayer {
                     }
                     break;
                 case MESSAGE_SHOW_PROGRESS:
-                    long pos = setProgress();
+                    setProgress();
                     if (!isDragging && isShowing) {
                         msg = obtainMessage(MESSAGE_SHOW_PROGRESS);
-                        sendMessageDelayed(msg, 1000 - (pos % 1000));
+                        sendMessageDelayed(msg, 1000);
                         updatePausePlay();
                     }
                     break;
@@ -413,9 +413,11 @@ public class GiraffePlayer {
     private void statusChange(int newStatus) {
         status=newStatus;
         if (!isLive && newStatus==STATUS_COMPLETED) {
+            handler.removeMessages(MESSAGE_SHOW_PROGRESS);
             hideAll();
             $.id(R.id.app_video_replay).visible();
         }else if (newStatus == STATUS_ERROR) {
+            handler.removeMessages(MESSAGE_SHOW_PROGRESS);
             hideAll();
             if (isLive) {
                 showStatus(activity.getResources().getString(R.string.small_problem));
