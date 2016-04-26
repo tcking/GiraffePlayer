@@ -528,9 +528,7 @@ public class GiraffePlayer {
 
     public void onDestroy() {
         orientationEventListener.disable();
-        handler.removeMessages(MESSAGE_RESTART_PLAY);
-        handler.removeMessages(MESSAGE_FADE_OUT);
-        handler.removeMessages(MESSAGE_SEEK_NEW_POSITION);
+        handler.removeCallbacksAndMessages(null);
         videoView.stopPlayback();
     }
 
