@@ -25,7 +25,7 @@ out of the box android video player base on [ijkplayer](https://github.com/Bilib
  read this first:[How to use 32-bit native libaries on 64-bit Android device](http://stackoverflow.com/questions/30782848/how-to-use-32-bit-native-libaries-on-64-bit-android-device),[What you should know about .so files](http://ph0b.com/android-abis-and-so-files/),[关于Android的.so文件你所需要知道的](http://www.jianshu.com/p/cb05698a1968)
 
 # How to use ([example code](https://github.com/tcking/GiraffePlayer/blob/master/app/src/main/java/tcking/github/com/giraffeplayer/example/MainActivity.java))
-## case 1: only what to play a vedio fullscreen
+## case 1: only what to play a video fullscreen
 just call`GiraffePlayerActivity.configPlayer(activity).play(url)`,all is done.
 
 ## case 2: embed a player in a layout
