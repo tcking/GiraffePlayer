@@ -9,12 +9,12 @@ out of the box android video player base on [ijkplayer](https://github.com/Bilib
 5. fullscreen by manual or sensor
 6. try to replay when error(only for live video)
 7. set video scale type (double click video will switch the scale types in app,you can find the difference)
-    1. fitParent:可能会剪裁,保持原视频的大小，显示在中心,当原视频的大小超过view的大小超过部分裁剪处理
-    2. fillParent:可能会剪裁,等比例放大视频，直到填满View为止,超过View的部分作裁剪处理
-    3. wrapContent:将视频的内容完整居中显示，如果视频大于view,则按比例缩视频直到完全显示在view中
-    4. fitXY:不剪裁,非等比例拉伸画面填满整个View
-    5. 16:9:不剪裁,非等比例拉伸画面到16:9,并完全显示在View中
-    6. 4:3:不剪裁,非等比例拉伸画面到4:3,并完全显示在View中
+    1. fitParent:scale the video uniformly (maintain the video's aspect ratio) so that both dimensions (width and height) of the video will be equal to or **less** than the corresponding dimension of the view. like ImageView's `CENTER_INSIDE`.等比缩放,画面填满view。
+    2. fillParent:scale the video uniformly (maintain the video's aspect ratio) so that both dimensions (width and height) of the video will be equal to or **larger** than the corresponding dimension of the view .like ImageView's `CENTER_CROP`.等比缩放,直到画面宽高都等于或小于view的宽高。
+    3. wrapContent:center the video in the view,if the video is less than view perform no scaling,if video is larger than view then scale the video uniformly so that both dimensions (width and height) of the video will be equal to or **less** than the corresponding dimension of the view. 将视频的内容完整居中显示，如果视频大于view,则按比例缩视频直到完全显示在view中。
+    4. fitXY:scale in X and Y independently, so that video matches view exactly.不剪裁,非等比例拉伸画面填满整个View
+    5. 16:9:scale x and y with aspect ratio 16:9 until both dimensions (width and height) of the video will be equal to or **less** than the corresponding dimension of the view.不剪裁,非等比例拉伸画面到16:9,并完全显示在View中。
+    6. 4:3:scale x and y with aspect ratio 4:3 until both dimensions (width and height) of the video will be equal to or **less** than the corresponding dimension of the view.不剪裁,非等比例拉伸画面到4:3,并完全显示在View中。
 
 # how to import library
  1. git clone https://github.com/tcking/GiraffePlayer.git
@@ -54,15 +54,15 @@ player.play(url);
 * `pause()`
 * `start()` 
 * `forward()` // forward or back,example: forward(0.1f) forward(-0.1f)
-* `getCurrentPosition()`
-* `setScaleType()`
-* `toggleAspectRatio()`
-* `seekTo()` //seek to specify position
+* `getCurrentPosition()` 
+* `setScaleType(GiraffePlayer.SCALETYPE_FITPARENT)` //set video scale type
+* `toggleAspectRatio()` // toggle video scale type
+* `seekTo(...)` //seek to specify position
 * `getDuration()` //get video duration
-* `onInfo()` //callback when have some information
-* `onError()` 
-* `onComplete()`
-* `onControlPanelVisibilityChange()` //callback when control panel visibility change
+* `onInfo(...)` //callback when have some information
+* `onError(...)`  //callback when an error occurred
+* `onComplete(...)` //callback when the play is over
+* `onControlPanelVisibilityChange(...)` //callback when control panel visibility change
 # screencap
 
 ![](https://github.com/tcking/GiraffePlayer/blob/master/screencap/device-2015-10-28-142934.png)
