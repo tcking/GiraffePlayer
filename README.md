@@ -1,6 +1,8 @@
 # GiraffePlayer
 out of the box android video player base on [ijkplayer](https://github.com/Bilibili/ijkplayer)
 
+**note:** if the player can't play your video,try branch **full-featured** which support more codec/format (bigger binary size)
+
 # features
 1. base on ijkplayer,support RTMP , HLS (http & https) , MP4,M4A etc.
 2. gestures for volume control
