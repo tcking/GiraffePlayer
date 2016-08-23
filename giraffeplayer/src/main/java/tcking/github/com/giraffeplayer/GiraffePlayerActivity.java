@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.Window;
 import android.widget.Toast;
 
@@ -99,6 +98,16 @@ public class GiraffePlayerActivity extends Activity {
         private String url;
         private boolean showNavIcon = true;
 
+        private static boolean debug=true;
+
+        public  Config debug(boolean debug) {
+            Config.debug = debug;
+            return this;
+        }
+
+        public static boolean isDebug() {
+            return debug;
+        }
 
         public Config setTitle(String title) {
             this.title = title;
