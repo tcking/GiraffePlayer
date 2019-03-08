@@ -1,6 +1,6 @@
 # GiraffePlayer
 
-NOTE:this project is no longer update please using improved [GiraffePlayer2](https://github.com/tcking/GiraffePlayer2) 
+NOTE:this project is no longer update please using improved [GiraffePlayer2](https://github.com/tcking/GiraffePlayer2) ,for flutter please visit [GPlayer](https://github.com/tcking/GPlayer)
 
 -------------------
 
