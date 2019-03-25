@@ -12,8 +12,9 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:keepScreenOn="true"
             android:screenOrientation="sensor"
-            >
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
